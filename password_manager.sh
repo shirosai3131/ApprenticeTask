@@ -30,7 +30,16 @@ do
 
     # Get Password が入力された場合
     $getPass)
-      # 後に処理を記述
+      read -p "サービス名を入力してください：" serchSaviceName
+      # $serchSaviceNameに入力された文字列をpassword.txt内で検索し、
+      # 対応するユーザー名とパスワードを取得
+      getServiceName=$(grep "$seachSaviceName" password.txt | cut -f 1 -d ":")
+      getUserName=$(grep "$seachSaviceName" password.txt | cut -f 2 -d ":")
+      getPassWord=$(grep "$seachSaviceName" password.txt | cut -f 3 -d ":")
+      echo "サービス名：$getServiceName"
+      echo "ユーザー名：$getUserName"
+      echo "パスワード：$getPassWord"
+      exit
       ;;
     
     #Exit が入力された場合
