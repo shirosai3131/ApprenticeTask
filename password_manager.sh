@@ -14,14 +14,9 @@ do
   case $action in
     # Add Password が入力された場合
     $addPass)
-      echo -n "サービス名を入力してください："
-      read saviceName
-
-      echo -n "ユーザー名を入力してください："
-      read userName
-
-      echo -n "パスワードを入力してください："
-      read passWord
+      read -p "サービス名を入力してください：" saviceName
+      read -p "ユーザー名を入力してください：" userName
+      read -p "パスワードを入力してください：" passWord
 
       # 入力された情報をpassword.txtに追記する。
       echo $saviceName:$userName:$passWord >> password.txt
@@ -30,20 +25,19 @@ do
 
     # Get Password が入力された場合
     $getPass)
-      read -p "サービス名を入力してください：" searchSaviceName
+      read -p "サービス名を入力してください：" searchServiceName
 
       # $serchSaviceNameに入力された文字列をpassword.txt内で検索し、出力を変数に代入
-      getServiceName=$(grep "^$searchSaviceName:" password.txt | cut -f 1 -d ":")
+      result=$(grep "^$searchServiceName:" password.txt | cut -f 1 -d ":") # 「$searchSaviceName:」コロンを付けないと頭文字1文字の入力でも検索に引っかかるため注意
       
       # 変数内の文字列が空でない場合
-      if [ -n "$getServiceName" ]; then
-        # $serchSaviceNameに入力された文字列をpassword.txt内で検索し、
-        # 対応するサービス名、ユーザー名、パスワードを取得し表示する。
-        getUserName=$(grep "^$getSaviceName" password.txt | cut -f 2 -d ":")
-        getPassWord=$(grep "^$getSaviceName" password.txt | cut -f 3 -d ":")
-        echo "サービス名：$getServiceName"
-        echo "ユーザー名：$getUserName"
-        echo "パスワード：$getPassWord"
+      if [ -n "$result" ]; then
+        # $resultに代入された文字列をpassword.txt内で検索し、
+        # 対応するユーザー名、パスワードを取得し表示する。
+        echo "サービス名：$result"
+        echo "ユーザー名：$(grep "^$result:" password.txt | cut -f 2 -d ":")"
+        echo "パスワード：$(grep "^$result:" password.txt | cut -f 3 -d ":")"
+        
       # 変数内の文字列が空の場合(サービス名が保存されていなかった場合)
       else
         echo "そのサービスは登録されていません。"
